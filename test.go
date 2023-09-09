@@ -6,7 +6,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"os"
 	"time"
@@ -23,7 +23,7 @@ const (
 
 func getImageMD5Content() (string, []byte) {
 
-	content, err := ioutil.ReadFile(ImagePath)
+	content, err := os.ReadFile(ImagePath)
 	if err != nil {
 		panic(err)
 	}
@@ -64,7 +64,7 @@ func main() {
 	}
 	defer taskRes.Body.Close()
 
-	taskResBody, _ := ioutil.ReadAll(taskRes.Body)
+	taskResBody, _ := io.ReadAll(taskRes.Body)
 	var taskResData map[string]interface{}
 	json.Unmarshal(taskResBody, &taskResData)
 	taskID := taskResData["task_id"].(string)
@@ -108,7 +108,7 @@ func main() {
 		}
 		defer res.Body.Close()
 
-		resBody, err := ioutil.ReadAll(res.Body)
+		resBody, err := io.ReadAll(res.Body)
 		if err != nil {
 			panic(err)
 		}
